@@ -5,11 +5,9 @@ import sys
 
 from PIL import Image, ImageDraw, ImageFont
 
-# fonte usada (bistream vera)
-font = ImageFont.truetype('Vera.ttf', size=50)
+font = ImageFont.truetype('./dataset-generator/Vera.ttf', size=50)
 
-# caminho
-path = "../dataset/raw/"
+path = "./dataset/raw/"
 
 def rndPointDisposition(dx, dy):
     """Return random disposition point."""
@@ -86,38 +84,28 @@ def draw_random_stuff(ctx):
         draw_random_line(ctx)
 
 def gen_captcha(text):
-    # cria uma imagem branca de 190x80
     image = Image.new('RGBA', (190, 80), color=(255, 255, 255))
     draw = ImageDraw.Draw(image)
 
-    # passo 1: desenha pontos e linhas aleatorias sem deformação e o texto
     draw_random_stuff(draw)
     draw.text((40, 20), text, fill='black', font=font)
-    del draw
 
-    # passo 2: transforma a imagem
     image = deform_image(image)
 
-    # passo 3: repetir passo 1
     draw = ImageDraw.Draw(image)
     draw_random_stuff(draw)
-    del draw
 
     return image
 
 def gen_string(size=4, chars=string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 
-if len(sys.argv) == 1:
-    print("ha")
-else:
+if len(sys.argv) == 2:
     num = int(sys.argv[1])
-    print(f"Gerando {num} captchas")
 
     for i in range(num):
         if i % 10 == 0:
             print(f"{str(i)} CAPTCHAS gerados")
         text = gen_string()
         image = gen_captcha(text)
-        filename = text + ".png"
-        image.save(path + filename)
+        image.save(path + text + ".png")

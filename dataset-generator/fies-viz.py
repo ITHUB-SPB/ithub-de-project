@@ -1,7 +1,6 @@
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
-import pytesseract
 import random
 import string
 
@@ -15,8 +14,8 @@ kernel = (3, 3)
 level = 2
 
 # caminho do dataset
-raw_path = "../dataset/raw/"
-seg_path = "../dataset/segmented/"
+raw_path = "./dataset/raw/"
+seg_path = "./dataset/segmented/"
 
 allowed_chars = string.ascii_lowercase + string.digits
 

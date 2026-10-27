@@ -1,29 +1,30 @@
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
-import pytesseract
 import string
 
 from PIL import Image
 from os import listdir, makedirs
 from collections import defaultdict
-from os.path import join, isdir, splitext
+from os.path import isdir, splitext
 
 # parâmetros do blur
 kernel = (3, 3)
 level = 2
 
-# caminho do dataset
-raw_path = "../dataset/raw/"
-seg_path = "../dataset/segmented/"
+raw_path = "./dataset/raw/"
+seg_path = "./dataset/segmented/"
 
 allowed_chars = string.ascii_lowercase + string.digits
 
-if not isdir(seg_path):
+try:
     makedirs(seg_path)
 
     for i in allowed_chars:
+        print(seg_path + "/" + i)
         makedirs(seg_path + "/" + i)
+except FileExistsError:
+    pass
 
 files = listdir(raw_path)
 
@@ -79,9 +80,10 @@ for file in files:
 
         letter = letters[i]
 
-        filename = "/" + str(counts[letter]).zfill(5) + ".png"
+        filename = str(counts[letter]).zfill(5) + ".png"
 
         path = seg_path + letter + "/" + filename
+        print(path)
         cv2.imwrite(path, img)
         counts[letter] += 1
 
